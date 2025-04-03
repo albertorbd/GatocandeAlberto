@@ -34,6 +34,7 @@ namespace Gatocan.Model;
         {
             ProductId = productId;
             Quantity = quantity;
+            
         }
     }
 
