@@ -7,8 +7,8 @@ namespace Gatocan.Data
 {
     public class GatocanContext : DbContext
     {
-                public GatocanContext(DbContextOptions<GatocanContext> options)
-            : base(options)
+public GatocanContext(DbContextOptions<GatocanContext> options)
+: base(options)
         {
         }
 
