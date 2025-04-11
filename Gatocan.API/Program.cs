@@ -1,11 +1,29 @@
 using Gatocan.Data;
 using Microsoft.EntityFrameworkCore;
+using Gatocan.Business;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUserRepository, UserEFRepository>();
+builder.Services.AddScoped<IProductRepository, ProductEFRepository>();
+
 // Agregar servicios al contenedor.
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5076") 
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 // Configurar Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -18,13 +36,8 @@ builder.Services.AddDbContext<GatocanContext>(options =>
 
 var app = builder.Build();
 
-// Aplicar migraciones al iniciar la aplicación
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<GatocanContext>();
-    context.Database.Migrate();
-}
+
+
 
 // Configurar el pipeline de solicitudes HTTP.
 if (app.Environment.IsDevelopment())
@@ -34,6 +47,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigins");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
