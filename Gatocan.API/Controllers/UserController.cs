@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Gatocan.Business;
 using Gatocan.Model;
+using Gatocan.Models;
 
 
 
@@ -79,7 +80,7 @@ public class UserController : ControllerBase
 
        [HttpPut("{userId}")]
 
-    public IActionResult UpdateUser(int userId, [FromBody] User userUpdate)
+    public IActionResult UpdateUser(int userId, [FromBody] UserUpdateDTO userUpdate)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
         
@@ -121,7 +122,7 @@ public class UserController : ControllerBase
     }
 
      [HttpPost]
-    public IActionResult CreateUser([FromBody] User userCreate)
+    public IActionResult CreateUser([FromBody] UserCreateDTO userCreate)
     {
         try 
         {

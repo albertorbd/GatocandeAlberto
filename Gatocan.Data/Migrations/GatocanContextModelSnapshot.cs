@@ -221,7 +221,7 @@ namespace Gatocan.Data.Migrations
                             Lastname = "Pérez",
                             Name = "Juan",
                             Password = "pass123",
-                            Role = "Cliente"
+                            Role = "user"
                         },
                         new
                         {
@@ -231,7 +231,7 @@ namespace Gatocan.Data.Migrations
                             Lastname = "Gómez",
                             Name = "Ana",
                             Password = "pass456",
-                            Role = "Admin"
+                            Role = "admin"
                         });
                 });
 

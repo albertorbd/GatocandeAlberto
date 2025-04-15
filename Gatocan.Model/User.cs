@@ -1,14 +1,25 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Gatocan.Models;
 namespace Gatocan.Model;
 
     public class User
     {
-        public int Id { get; set; }          
-        public string Name { get; set; }    
+        [Key]
+        public int Id { get; set; }
+         [Required]          
+        public string? Name { get; set; }  
+        [Required]  
         public string Lastname { get; set; } 
-        public string Email { get; set; }   
+         [Required]
+        public string Email { get; set; } 
+         [Required]  
         public string Password { get; set; } 
         public double Balance { get; set; } 
-        public string Role { get; set; }    
+        [Required]
+        public string Role { get; set; } = Roles.User;
+
+         [JsonIgnore] 
         public List<Transaction> Transactions { get; set; }
         
     

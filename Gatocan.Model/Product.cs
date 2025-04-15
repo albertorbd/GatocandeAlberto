@@ -1,15 +1,24 @@
 namespace Gatocan.Model;
+using System.ComponentModel.DataAnnotations;
 
  public class Product
     {
-        public int Id { get; set; }     
-        public string Name { get; set; } 
-        public string Description { get; set; }
-        public double Price { get; set; }  
-        public string Category { get; set; }
-        public string Brand { get; set; } 
-        public int Stock { get; set; }    
-        public string ImageUrl { get; set; } 
+[Key]
+public int Id { get; set; }
+[Required]     
+public string Name { get; set; } 
+[Required] 
+public string Description { get; set; }
+[Required] 
+public double Price { get; set; }
+[Required]   
+public string Category { get; set; }
+[Required] 
+public string Brand { get; set; }
+[Required]  
+public int Stock { get; set; }
+[Required]     
+public string ImageUrl { get; set; } 
     
 
 public Product(){}

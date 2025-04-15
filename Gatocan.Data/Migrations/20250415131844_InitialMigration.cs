@@ -132,8 +132,8 @@ namespace Gatocan.Data.Migrations
                 columns: new[] { "Id", "Balance", "Email", "Lastname", "Name", "Password", "Role" },
                 values: new object[,]
                 {
-                    { 1, 100.0, "juan@example.com", "Pérez", "Juan", "pass123", "Cliente" },
-                    { 2, 150.0, "ana@example.com", "Gómez", "Ana", "pass456", "Admin" }
+                    { 1, 100.0, "juan@example.com", "Pérez", "Juan", "pass123", "user" },
+                    { 2, 150.0, "ana@example.com", "Gómez", "Ana", "pass456", "admin" }
                 });
 
             migrationBuilder.InsertData(

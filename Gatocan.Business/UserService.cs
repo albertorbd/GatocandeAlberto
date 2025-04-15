@@ -1,5 +1,6 @@
 using Gatocan.Data;
 using Gatocan.Model;
+using Gatocan.Models;
 
 
 namespace Gatocan.Business;
@@ -12,11 +13,11 @@ public UserService(IUserRepository repository)
 {
 _repository = repository;
 }
-public User RegisterUser(User user){
+public User RegisterUser(UserCreateDTO userCreateDTO){
 
 try
  {
-user= new(user.Name, user.Lastname, user.Email, user.Password);
+User user= new(userCreateDTO.Name, userCreateDTO.Lastname, userCreateDTO.Email, userCreateDTO.Password);
 _repository.AddUser(user);
 
 return user;
@@ -87,15 +88,15 @@ throw new Exception("An error ocurred deleting the user", e);
 }
 }
 
- public void UpdateUser(int userId,  User newUser){
+ public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO){
     
 var user = _repository.GetUserById(userId);
 if (user==null){
 throw new KeyNotFoundException($"User with ID {userId} wasnt found");
 }
-
-user.Email= newUser.Email;
-user.Password=newUser.Password;
+user.Name= userUpdateDTO.Name;
+user.Email= userUpdateDTO.Email;
+user.Password= userUpdateDTO.Password;
 _repository.UpdateUser(user);
 _repository.SaveChanges();
 }
