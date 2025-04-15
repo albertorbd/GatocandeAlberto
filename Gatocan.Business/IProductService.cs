@@ -1,12 +1,13 @@
 using Gatocan.Model;
+using Gatocan.Models;
 
 namespace Gatocan.Business;
 
 public interface IProductService{
-Product RegisterProduct(Product product);
+Product RegisterProduct(ProductCreateDTO productCreateDTO);
 IEnumerable<Product> GetAllProducts();  
 Product GetProductById(int productId);
 Product GetProductByName(string name);
 void DeleteProduct(int productId);
-void UpdateProduct(int productId, Product newProduct);   
+void UpdateProduct(int productId, ProductUpdateDTO productUpdateDTO);   
 }

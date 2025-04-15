@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Gatocan.Model;
 using Microsoft.Extensions.Logging;
+using Gatocan.Models;
 
 
 namespace Gatocan.Data
@@ -69,7 +70,6 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                     Email = "juan@example.com",
                     Password = "pass123",
                     Balance = 100.0,
-                    Role = "Cliente"
                 },
                 new User
                 {
@@ -79,7 +79,7 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                     Email = "ana@example.com",
                     Password = "pass456",
                     Balance = 150.0,
-                    Role = "Admin"
+                    Role = Roles.Admin
                 }
             );
 

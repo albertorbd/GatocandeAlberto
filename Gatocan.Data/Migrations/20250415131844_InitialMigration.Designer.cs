@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatocan.Data.Migrations
 {
     [DbContext(typeof(GatocanContext))]
-    [Migration("20250403183444_InitialMigration")]
+    [Migration("20250415131844_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,7 +223,7 @@ namespace Gatocan.Data.Migrations
                             Lastname = "Pérez",
                             Name = "Juan",
                             Password = "pass123",
-                            Role = "Cliente"
+                            Role = "user"
                         },
                         new
                         {
@@ -233,7 +233,7 @@ namespace Gatocan.Data.Migrations
                             Lastname = "Gómez",
                             Name = "Ana",
                             Password = "pass456",
-                            Role = "Admin"
+                            Role = "admin"
                         });
                 });
 

@@ -1,5 +1,6 @@
 using Gatocan.Data;
 using Gatocan.Model;
+using Gatocan.Models;
 
 
 namespace Gatocan.Business;
@@ -13,10 +14,10 @@ public ProductService(IProductRepository repository)
 _repository = repository;
 }
 
-public Product RegisterProduct( Product product){
+public Product RegisterProduct( ProductCreateDTO productCreateDTO){
  try
  {
-    product= new(product.Name,product.Description, product.Price, product.Category, product.Brand, product.Stock, product.ImageUrl);
+    Product product= new(productCreateDTO.Name,productCreateDTO.Description, productCreateDTO.Price, productCreateDTO.Category, productCreateDTO.Brand, productCreateDTO.Stock, productCreateDTO.ImageUrl);
     _repository.AddProduct(product);
     _repository.SaveChanges();
     return product;
@@ -69,19 +70,19 @@ Console.WriteLine("No product found");
 throw new Exception("An error ocurred deleting the product", e);
 }
 }
-public void UpdateProduct(int productId,  Product newProduct){
+public void UpdateProduct(int productId,  ProductUpdateDTO productUpdateDTO){
     
 var product = _repository.GetProductById(productId);
 if (product==null){
 throw new KeyNotFoundException($"Product with ID {productId} wasnt found");
 }
-product.Name= newProduct.Name;
-product.Description=newProduct.Description;
-product.Price=newProduct.Price;
-product.Category= newProduct.Category;
-product.Brand= newProduct.Brand;
-product.Stock=newProduct.Stock;
-product.ImageUrl= newProduct.ImageUrl;
+product.Name= productUpdateDTO.Name;
+product.Description=productUpdateDTO.Description;
+product.Price=productUpdateDTO.Price;
+product.Category= productUpdateDTO.Category;
+product.Brand= productUpdateDTO.Brand;
+product.Stock=productUpdateDTO.Stock;
+product.ImageUrl= productUpdateDTO.ImageUrl;
 _repository.UpdateProduct(product);
 _repository.SaveChanges();
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Gatocan.Business;
 using Gatocan.Model;
+using Gatocan.Models;
 
 
 
@@ -76,7 +77,7 @@ public class ProductController : ControllerBase
         }
     }
 [HttpPut("{productId}")]
-   public IActionResult UpdateProduct(int productId, [FromBody] Product productUpdate)
+   public IActionResult UpdateProduct(int productId, [FromBody] ProductUpdateDTO productUpdate)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
         
@@ -118,7 +119,7 @@ public class ProductController : ControllerBase
     }
 
  [HttpPost]
-    public IActionResult CreateProduct([FromBody] Product productCreate)
+    public IActionResult CreateProduct([FromBody] ProductCreateDTO productCreate)
     {
         try 
         {
