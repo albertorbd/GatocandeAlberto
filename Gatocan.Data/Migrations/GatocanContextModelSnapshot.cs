@@ -51,6 +51,41 @@ namespace Gatocan.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Gatocan.Model.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CartId = 1,
+                            ProductId = 2,
+                            Quantity = 3
+                        });
+                });
+
             modelBuilder.Entity("Gatocan.Model.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -243,45 +278,26 @@ namespace Gatocan.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Gatocan.Model.CartItem", "Items", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"), 1L, 1);
-
-                            b1.Property<int>("CartId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("ProductId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Quantity")
-                                .HasColumnType("int");
-
-                            b1.HasKey("Id");
-
-                            b1.HasIndex("CartId");
-
-                            b1.ToTable("CartItem");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CartId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    Id = 1,
-                                    CartId = 1,
-                                    ProductId = 2,
-                                    Quantity = 3
-                                });
-                        });
-
-                    b.Navigation("Items");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Gatocan.Model.CartItem", b =>
+                {
+                    b.HasOne("Gatocan.Model.Cart", "Cart")
+                        .WithMany("Items")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gatocan.Model.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Gatocan.Model.Transaction", b =>
@@ -289,7 +305,7 @@ namespace Gatocan.Data.Migrations
                     b.HasOne("Gatocan.Model.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Gatocan.Model.User", "User")
@@ -301,6 +317,11 @@ namespace Gatocan.Data.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Gatocan.Model.Cart", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Gatocan.Model.User", b =>

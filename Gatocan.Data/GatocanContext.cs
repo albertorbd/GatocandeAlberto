@@ -3,64 +3,62 @@ using Gatocan.Model;
 using Microsoft.Extensions.Logging;
 using Gatocan.Models;
 
-
 namespace Gatocan.Data
 {
     public class GatocanContext : DbContext
     {
-public GatocanContext(DbContextOptions<GatocanContext> options)
-: base(options)
+        public GatocanContext(DbContextOptions<GatocanContext> options)
+            : base(options)
         {
         }
 
-        
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
-    
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            // Configuración de claves primarias
             modelBuilder.Entity<User>().HasKey(u => u.Id);
             modelBuilder.Entity<Product>().HasKey(p => p.Id);
             modelBuilder.Entity<Transaction>().HasKey(t => t.Id);
             modelBuilder.Entity<Cart>().HasKey(c => c.Id);
+            modelBuilder.Entity<CartItem>().HasKey(ci => ci.Id);
 
-        
+            // Configuración de relaciones
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Transactions)
                 .WithOne(t => t.User)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-      
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.Product)
                 .WithMany()
                 .HasForeignKey(t => t.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
-         
             modelBuilder.Entity<Cart>()
                 .HasOne(c => c.User)
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-           
             modelBuilder.Entity<Cart>()
-                .OwnsMany(c => c.Items, cb =>
-                {
-                    cb.WithOwner().HasForeignKey("CartId"); 
-                    cb.Property<int>("Id"); 
-                    cb.HasKey("Id");
-                });
+                .HasMany(c => c.Items)
+                .WithOne(ci => ci.Cart)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-         
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany()
+                .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            
+            // Datos de prueba
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -69,7 +67,7 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                     Lastname = "Pérez",
                     Email = "juan@example.com",
                     Password = "pass123",
-                    Balance = 100.0,
+                    Balance = 100.0
                 },
                 new User
                 {
@@ -83,7 +81,6 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                 }
             );
 
-            
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -109,7 +106,6 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                 }
             );
 
-           
             modelBuilder.Entity<Transaction>().HasData(
                 new Transaction
                 {
@@ -135,7 +131,6 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                 }
             );
 
-           
             modelBuilder.Entity<Cart>().HasData(
                 new Cart
                 {
@@ -145,12 +140,11 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
                 }
             );
 
-           
-            modelBuilder.Entity<Cart>().OwnsMany(c => c.Items).HasData(
-                new
+            modelBuilder.Entity<CartItem>().HasData(
+                new CartItem
                 {
-                    Id = 1,      
-                    CartId = 1,  
+                    Id = 1,
+                    CartId = 1,
                     ProductId = 2,
                     Quantity = 3
                 }
@@ -159,7 +153,6 @@ public GatocanContext(DbContextOptions<GatocanContext> options)
             base.OnModelCreating(modelBuilder);
         }
 
-        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder

@@ -8,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 builder.Services.AddScoped<IProductRepository, ProductEFRepository>();
+builder.Services.AddScoped<ICartRepository, CartEFRepository>();
+
 
 // Agregar servicios al contenedor.
 builder.Services.AddControllers();
