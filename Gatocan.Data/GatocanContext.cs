@@ -34,11 +34,12 @@ namespace Gatocan.Data
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Transaction>()
-                .HasOne(t => t.Product)
-                .WithMany()
-                .HasForeignKey(t => t.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+           modelBuilder.Entity<Transaction>()
+            .HasOne(t => t.Product)
+            .WithMany()
+            .HasForeignKey(t => t.ProductId)
+            .IsRequired(false)       
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Cart>()
                 .HasOne(c => c.User)
@@ -117,18 +118,8 @@ namespace Gatocan.Data
                     Date = new DateTime(2024, 5, 6, 0, 9, 2),
                     PaymentMethod = "Tarjeta",
                     Tipo = TransactionType.Compra
-                },
-                new Transaction
-                {
-                    Id = 2,
-                    UserId = 1,
-                    ProductId = 1,
-                    Amount = 50.0,
-                    Quantity = 1,
-                    Date = new DateTime(2024, 5, 6, 0, 9, 12),
-                    PaymentMethod = "Transferencia",
-                    Tipo = TransactionType.Ingreso
                 }
+               
             );
 
             modelBuilder.Entity<Cart>().HasData(

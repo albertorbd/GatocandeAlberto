@@ -7,16 +7,16 @@ public enum TransactionType
 }
 public class Transaction{
 
-        public int Id { get; set; }         
-        public int UserId { get; set; }      
-        public User User { get; set; }       
-        public int ProductId { get; set; }   
-        public Product Product { get; set; }      
-        public double Amount { get; set; }   
-        public int Quantity { get; set; }   
-        public DateTime Date { get; set; }  
-        public string PaymentMethod { get; set; }
-         public TransactionType Tipo { get; set; }
+public int Id { get; set; }         
+public int UserId { get; set; }      
+public User User { get; set; }       
+public int? ProductId { get; set; }   
+public Product Product { get; set; }      
+public double Amount { get; set; }   
+public int Quantity { get; set; }   
+public DateTime Date { get; set; }  
+public string PaymentMethod { get; set; }
+public TransactionType Tipo { get; set; }
 
 
 

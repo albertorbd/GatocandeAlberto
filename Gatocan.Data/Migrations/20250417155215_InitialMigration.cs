@@ -73,7 +73,7 @@ namespace Gatocan.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -151,11 +151,6 @@ namespace Gatocan.Data.Migrations
                 table: "Transactions",
                 columns: new[] { "Id", "Amount", "Date", "PaymentMethod", "ProductId", "Quantity", "Tipo", "UserId" },
                 values: new object[] { 1, 20.5, new DateTime(2024, 5, 6, 0, 9, 2, 0, DateTimeKind.Unspecified), "Tarjeta", 1, 1, 1, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Transactions",
-                columns: new[] { "Id", "Amount", "Date", "PaymentMethod", "ProductId", "Quantity", "Tipo", "UserId" },
-                values: new object[] { 2, 50.0, new DateTime(2024, 5, 6, 0, 9, 12, 0, DateTimeKind.Unspecified), "Transferencia", 1, 1, 0, 1 });
 
             migrationBuilder.InsertData(
                 table: "CartItems",

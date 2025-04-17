@@ -1,7 +1,5 @@
  
- using System.ComponentModel.DataAnnotations;
-
-namespace Gatocan.Models;
+namespace Gatocan.Model;
 
 
   public class CartItemDto

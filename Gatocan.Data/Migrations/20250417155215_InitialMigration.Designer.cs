@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatocan.Data.Migrations
 {
     [DbContext(typeof(GatocanContext))]
-    [Migration("20250416151409_InitialMigration")]
+    [Migration("20250417155215_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,7 +169,7 @@ namespace Gatocan.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -199,17 +199,6 @@ namespace Gatocan.Data.Migrations
                             ProductId = 1,
                             Quantity = 1,
                             Tipo = 1,
-                            UserId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Amount = 50.0,
-                            Date = new DateTime(2024, 5, 6, 0, 9, 12, 0, DateTimeKind.Unspecified),
-                            PaymentMethod = "Transferencia",
-                            ProductId = 1,
-                            Quantity = 1,
-                            Tipo = 0,
                             UserId = 1
                         });
                 });
@@ -307,8 +296,7 @@ namespace Gatocan.Data.Migrations
                     b.HasOne("Gatocan.Model.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Gatocan.Model.User", "User")
                         .WithMany("Transactions")
