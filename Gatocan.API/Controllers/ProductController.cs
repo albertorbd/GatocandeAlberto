@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Gatocan.Business;
 using Gatocan.Model;
-using Gatocan.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 
@@ -20,6 +21,8 @@ public class ProductController : ControllerBase
         _productService = productService;
           
     }
+
+[Authorize(Roles = Roles.Admin + "," + Roles.User)]
 [HttpGet]
     public ActionResult<IEnumerable<Product>> GetAllProducts()
     {
@@ -35,6 +38,7 @@ public class ProductController : ControllerBase
         }
     }
 
+[Authorize(Roles = Roles.Admin + "," + Roles.User)]
 [HttpGet("byName", Name = "GetProductByName")]
     public IActionResult GetProductByName(string name)
     {
@@ -56,6 +60,8 @@ public class ProductController : ControllerBase
         }
     }
 
+
+ [Authorize(Roles = Roles.Admin + "," + Roles.User)]
  [HttpGet("{productId}", Name = "GetProductById") ]
     public IActionResult GetProductById(int productId)
     {
@@ -76,6 +82,9 @@ public class ProductController : ControllerBase
             return BadRequest($"An error has ocurred trying to get the product with id: {productId}. {ex.Message}");
         }
     }
+
+
+[Authorize(Roles = Roles.Admin)]
 [HttpPut("{productId}")]
    public IActionResult UpdateProduct(int productId, [FromBody] ProductUpdateDTO productUpdate)
     {
@@ -98,6 +107,8 @@ public class ProductController : ControllerBase
         }
     }
 
+
+[Authorize(Roles = Roles.Admin)]
  [HttpDelete("{productId}")]
     public IActionResult DeleteProduct(int productId)
     {
@@ -118,6 +129,8 @@ public class ProductController : ControllerBase
         }
     }
 
+    
+[Authorize(Roles = Roles.Admin)]
  [HttpPost]
     public IActionResult CreateProduct([FromBody] ProductCreateDTO productCreate)
     {

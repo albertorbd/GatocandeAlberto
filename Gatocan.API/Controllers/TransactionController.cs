@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Gatocan.Business;
 using Gatocan.Model;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Gatocan.API.Controllers
 {
@@ -10,18 +12,24 @@ namespace Gatocan.API.Controllers
     {
         private readonly ITransactionService _transactionService;
         private readonly ILogger<TransactionsController> _logger;
+         private readonly IAuthService _authService;
 
         public TransactionsController(ITransactionService transactionService,
-        ILogger<TransactionsController> logger)
+        ILogger<TransactionsController> logger, IAuthService authService)
         {
             _transactionService = transactionService;
             _logger = logger;
+            _authService= authService;
+            
         }
 
-        // GET api/transactions/{userId}
+         [Authorize(Roles = Roles.Admin + "," + Roles.User)] 
         [HttpGet("{userId}")]
         public ActionResult<IEnumerable<Transaction>> GetAllForUser(int userId)
         {
+             if (!_authService.HasAccessToResource(Convert.ToInt32(userId), HttpContext.User)) 
+            {return Forbid(); }
+
             try
             {
                 var ops = _transactionService.GetTransactionsByUser(userId);
@@ -35,9 +43,14 @@ namespace Gatocan.API.Controllers
         }
 
         // GET api/transactions/{userId}/purchased
+        [Authorize(Roles = Roles.Admin + "," + Roles.User)] 
         [HttpGet("{userId}/purchased")]
         public ActionResult<IEnumerable<Product>> GetProductsPurchased(int userId)
         {
+
+             if (!_authService.HasAccessToResource(Convert.ToInt32(userId), HttpContext.User)) 
+            {return Forbid(); }
+
             try
             {
                 var products = _transactionService.GetPurchasedProducts(userId);
@@ -50,12 +63,16 @@ namespace Gatocan.API.Controllers
             }
         }
 
+       
         // POST api/transactions/{userId}/deposit
+        [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpPost("{userId}/deposit")]
         public IActionResult Deposit(int userId, [FromBody] DepositDto dto)
         {
             if (userId != dto.UserId)
                 return BadRequest("UserId mismatch between route and body.");
+            if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), HttpContext.User)) 
+            {return Forbid(); }
 
             try
             {
@@ -74,11 +91,17 @@ namespace Gatocan.API.Controllers
         }
 
         // POST api/transactions/{userId}/purchase
+         [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpPost("{userId}/purchase")]
         public IActionResult Purchase(int userId, [FromBody] PurchaseDto dto)
         {
+    
             if (userId != dto.UserId)
                 return BadRequest("UserId mismatch between route and body.");
+
+             if (!_authService.HasAccessToResource(Convert.ToInt32(dto.UserId), HttpContext.User)) 
+            {return Forbid(); }
+
 
             try
             {

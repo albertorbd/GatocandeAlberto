@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Gatocan.Model;
 using Microsoft.Extensions.Logging;
-using Gatocan.Models;
 
-namespace Gatocan.Data
-{
+namespace Gatocan.Data;
+
     public class GatocanContext : DbContext
     {
         public GatocanContext(DbContextOptions<GatocanContext> options)
@@ -151,4 +150,3 @@ namespace Gatocan.Data
                 .EnableSensitiveDataLogging();
         }
     }
-}
