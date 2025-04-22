@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Gatocan.Business;
 using Gatocan.Model;
-using Gatocan.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 
@@ -13,14 +14,16 @@ public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
     private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-  public UserController(ILogger<UserController> logger, IUserService userService)
+  public UserController(ILogger<UserController> logger, IUserService userService, IAuthService authService )
     {
         _logger = logger;
         _userService = userService;
+        _authService= authService;
           
     }
-
+ [Authorize(Roles = Roles.Admin)]
  [HttpGet]
     public ActionResult<IEnumerable<User>> GetAllUsers()
     {
@@ -36,6 +39,7 @@ public class UserController : ControllerBase
         }
     }
 
+[Authorize(Roles = Roles.Admin)]
 [HttpGet("byEmail", Name = "GetUserByEmail")]
     public IActionResult GetUserByEmail(string email)
     {
@@ -56,11 +60,14 @@ public class UserController : ControllerBase
             return BadRequest($"An error has ocurred trying to get the user with email: {email}. {ex.Message}");
         }
     }
-
+ [Authorize(Roles = Roles.Admin + "," +  Roles.User)]
  [HttpGet("{userId}", Name = "GetUserById") ]
     public IActionResult GetUserById(int userId)
     {
         
+     if (!_authService.HasAccessToResource(Convert.ToInt32(userId), HttpContext.User)) 
+            {return Forbid(); }
+
         try
         {
             var user = _userService.GetUserById(userId);
@@ -78,11 +85,14 @@ public class UserController : ControllerBase
         }
     }
 
-       [HttpPut("{userId}")]
+[Authorize(Roles = Roles.Admin + "," + Roles.User)]
+[HttpPut("{userId}")]
 
     public IActionResult UpdateUser(int userId, [FromBody] UserUpdateDTO userUpdate)
     {
         if (!ModelState.IsValid)  {return BadRequest(ModelState); } 
+          if (!_authService.HasAccessToResource(Convert.ToInt32(userId), HttpContext.User)) 
+            {return Forbid(); }
         
         try
         {
@@ -101,9 +111,14 @@ public class UserController : ControllerBase
         }
     }
 
+ [Authorize(Roles = Roles.Admin + "," + Roles.User)]
  [HttpDelete("{userId}")]
     public IActionResult DeleteUser(int userId)
     {
+
+     if (!_authService.HasAccessToResource(Convert.ToInt32(userId), HttpContext.User)) 
+        {return Forbid(); }
+
         try
         {
             _userService.DeleteUser(userId);
@@ -126,7 +141,7 @@ public class UserController : ControllerBase
     {
         try 
         {
-            // Verificar si el modelo recibido es válido
+           
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

@@ -1,6 +1,6 @@
 using Gatocan.Data;
 using Gatocan.Model;
-using Gatocan.Models;
+
 
 
 namespace Gatocan.Business;
@@ -101,7 +101,43 @@ _repository.UpdateUser(user);
 _repository.SaveChanges();
 }
 
-  
+public bool IsEmailTaken(string email){
+        try{
+            var users= _repository.GetAllUsers();
+            foreach(var user in users){
+                if(user.Email==email){
+                    return true;
+                }
+            }
+            return false;
+        }catch (Exception e)
+        {
+            
+            throw new Exception("An error has ocurred checking if email is in use", e);
+        }
+
+        }
+   
+
+    
+    
+public User loginCheck(string email, string password)
+{
+    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+    {
+        throw new ArgumentException("Email and password are obligatory.");
+    }
+
+    foreach (var userToLog in _repository.GetAllUsers())
+    {
+        if (userToLog.Email.Equals(email, StringComparison.OrdinalIgnoreCase) &&
+            userToLog.Password.Equals(password))
+        {
+            return userToLog;
+        }
+    }
+    return null;
+}  
 
 
 

@@ -1,7 +1,7 @@
 using Gatocan.Business;
 using Gatocan.Model;
-using Gatocan.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Gatocan.API.Controllers
@@ -11,16 +11,23 @@ namespace Gatocan.API.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly IAuthService _authService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IAuthService authService)
         {
             _cartService = cartService;
+            _authService= authService;
         }
 
-        // GET: api/cart/{userId}
+        [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpGet("{userId}")]
         public ActionResult<Cart> GetCart(int userId)
         {
+            
+               if (!_authService.HasAccessToResource(userId, User))
+                return Forbid();        
+
+
             try
             {
                 var cart = _cartService.GetCartByUserId(userId);
@@ -32,10 +39,12 @@ namespace Gatocan.API.Controllers
             }
         }
 
-        
+         [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpPost("{userId}/add")]
         public IActionResult AddProductToCart(int userId, [FromBody] CartItemDto itemDto)
         {
+             if (!_authService.HasAccessToResource(userId, User))
+                return Forbid();   
             try
             {
                 _cartService.AddProductToCart(userId, itemDto.ProductId, itemDto.Quantity);
@@ -47,10 +56,12 @@ namespace Gatocan.API.Controllers
             }
         }
 
-       
+        [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpPut("{userId}/update")]
         public IActionResult UpdateProductQuantity(int userId, [FromBody] CartItemDto itemDto)
         {
+             if (!_authService.HasAccessToResource(userId, User))
+                return Forbid();   
             try
             {
                 _cartService.UpdateProductQuantityInCart(userId, itemDto.ProductId, itemDto.Quantity);
@@ -62,10 +73,12 @@ namespace Gatocan.API.Controllers
             }
         }
 
-        
+        [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpDelete("{userId}/remove/{productId}")]
         public IActionResult RemoveProductFromCart(int userId, int productId)
         {
+            if (!_authService.HasAccessToResource(userId, User))
+                return Forbid();  
             try
             {
                 _cartService.RemoveProductFromCart(userId, productId);
@@ -77,10 +90,13 @@ namespace Gatocan.API.Controllers
             }
         }
 
-        
+        [Authorize(Roles = Roles.Admin + "," + Roles.User)]
         [HttpDelete("{userId}/clear")]
         public IActionResult ClearCart(int userId)
         {
+
+            if (!_authService.HasAccessToResource(userId, User))
+                return Forbid();  
             try
             {
                 _cartService.ClearUserCart(userId);

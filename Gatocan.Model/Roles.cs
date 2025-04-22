@@ -1,4 +1,4 @@
-namespace Gatocan.Models; 
+namespace Gatocan.Model; 
 
 public static class Roles
 {
