@@ -139,7 +139,7 @@ namespace Gatocan.Data.Migrations
                 values: new object[,]
                 {
                     { 1, 100.0, "juan@example.com", "Pérez", "Juan", "pass123", "user" },
-                    { 2, 150.0, "ana@example.com", "Gómez", "Ana", "pass456", "admin" }
+                    { 2, 150.0, "albertoriveiro@hotmail.es", "Riveiro", "Alberto", "pass456", "admin" }
                 });
 
             migrationBuilder.InsertData(
