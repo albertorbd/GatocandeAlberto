@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatocan.Data.Migrations
 {
     [DbContext(typeof(GatocanContext))]
-    [Migration("20250417155215_InitialMigration")]
+    [Migration("20250424130049_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -253,9 +253,9 @@ namespace Gatocan.Data.Migrations
                         {
                             Id = 2,
                             Balance = 150.0,
-                            Email = "ana@example.com",
-                            Lastname = "Gómez",
-                            Name = "Ana",
+                            Email = "albertoriveiro@hotmail.es",
+                            Lastname = "Riveiro",
+                            Name = "Alberto",
                             Password = "pass456",
                             Role = "admin"
                         });

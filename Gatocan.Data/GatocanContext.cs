@@ -72,9 +72,9 @@ namespace Gatocan.Data;
                 new User
                 {
                     Id = 2,
-                    Name = "Ana",
-                    Lastname = "Gómez",
-                    Email = "ana@example.com",
+                    Name = "Alberto",
+                    Lastname = "Riveiro",
+                    Email = "albertoriveiro@hotmail.es",
                     Password = "pass456",
                     Balance = 150.0,
                     Role = Roles.Admin

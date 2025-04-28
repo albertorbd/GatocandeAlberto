@@ -5,7 +5,7 @@ using Gatocan.Model;
 namespace GamedreamAPI.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+   [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -34,7 +34,7 @@ namespace GamedreamAPI.API.Controllers
             if (user != null)
             {
                 var token = _authService.GenerateJwtToken(user);
-                return Ok(token);
+                  return Ok(new { token });
             }
             else
             {

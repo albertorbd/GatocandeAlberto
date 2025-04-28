@@ -251,9 +251,9 @@ namespace Gatocan.Data.Migrations
                         {
                             Id = 2,
                             Balance = 150.0,
-                            Email = "ana@example.com",
-                            Lastname = "Gómez",
-                            Name = "Ana",
+                            Email = "albertoriveiro@hotmail.es",
+                            Lastname = "Riveiro",
+                            Name = "Alberto",
                             Password = "pass456",
                             Role = "admin"
                         });
