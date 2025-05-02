@@ -22,7 +22,7 @@ public class ProductController : ControllerBase
           
     }
 
-[Authorize(Roles = Roles.Admin + "," + Roles.User)]
+
 [HttpGet]
     public ActionResult<IEnumerable<Product>> GetAllProducts()
     {

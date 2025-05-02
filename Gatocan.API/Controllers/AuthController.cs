@@ -20,6 +20,34 @@ namespace GamedreamAPI.API.Controllers
             _authService=authService;
         }
 
+         [HttpPost("register")]
+    public IActionResult Register([FromBody] UserCreateDTO dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
+        {
+            
+            if (_userService.GetUserByEmail(dto.Email) != null)
+                return BadRequest("El usuario ya está registrado.");
+
+            
+            var user = _userService.RegisterUser(dto);
+
+            
+            var token = _authService.GenerateJwtToken(user);
+
+            return Ok(new { user, token });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error registrando usuario: {ex.Message}");
+            return BadRequest($"Error registrando usuario: {ex.Message}");
+        }
+    }
+
+
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDTO loginDTO)
         {

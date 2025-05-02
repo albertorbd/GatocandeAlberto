@@ -136,35 +136,5 @@ public class UserController : ControllerBase
         }
     }
 
-     [HttpPost]
-    public IActionResult CreateUser([FromBody] UserCreateDTO userCreate)
-    {
-        try 
-        {
-           
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var userExist = _userService.GetUserByEmail(userCreate.Email);
-            if (userExist != null)
-            {
-                return BadRequest("El usuario ya está registrado.");
-            }
-
-            var user = _userService.RegisterUser(userCreate);
-
-           
-            return CreatedAtAction(nameof(GetAllUsers), new { userId = user.Id }, userCreate);
-        }     
-          catch (Exception ex)
-        {
-            _logger.LogError($"An error has ocurred trying to register the user. {ex.Message}");
-            return BadRequest($"An error has ocurred trying to register the user. {ex.Message}");
-        }
-        
-    }
-
 
 }
