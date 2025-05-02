@@ -38,15 +38,16 @@ builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 // Agregar servicios al contenedor.
 builder.Services.AddControllers();
 
+// Configurar CORS para permitir todas las solicitudes
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:5076") 
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
+options.AddPolicy("MyAllowedOrigins",
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -99,7 +100,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowSpecificOrigins");
+app.UseCors("MyAllowedOrigins");
 
 app.UseAuthentication();
 
