@@ -42,7 +42,6 @@ namespace Gatocan.Model;
         public int ProductId { get; set; }
         public int Quantity { get; set; }
 
-       [JsonIgnore]
         public Product Product { get; set; }
         
          [ForeignKey("Cart")]
