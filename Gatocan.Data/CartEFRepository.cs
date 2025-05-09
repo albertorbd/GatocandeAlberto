@@ -15,8 +15,10 @@ namespace Gatocan.Data;
 
 public Cart GetCartByUserId(int userId)
 {
-    var cart = _context.Carts.Include(c => c.Items)
-    .FirstOrDefault(c => c.UserId == userId);
+    var cart = _context.Carts
+        .Include(c => c.Items)
+        .ThenInclude(i => i.Product)
+        .FirstOrDefault(c => c.UserId == userId);
 
     if (cart == null)
     {
@@ -33,7 +35,6 @@ public Cart GetCartByUserId(int userId)
 
     return cart;
 }
-
         public void AddItemToCart(int cartId, CartItem item)
         {
             var cart = _context.Carts.Include(c => c.Items).FirstOrDefault(c => c.Id == cartId);

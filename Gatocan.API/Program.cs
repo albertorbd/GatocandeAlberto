@@ -5,6 +5,7 @@ using Gatocan.Business;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,7 +37,11 @@ builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 
 
 // Agregar servicios al contenedor.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 // Configurar CORS para permitir todas las solicitudes
 builder.Services.AddCors(options =>
@@ -101,6 +106,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("MyAllowedOrigins");
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 
