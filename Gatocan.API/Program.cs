@@ -107,6 +107,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("MyAllowedOrigins");
 
+app.UseStaticFiles();
+
 app.UseAuthentication();
 
 app.UseAuthorization();
