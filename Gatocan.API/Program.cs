@@ -7,9 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 
-
 var builder = WebApplication.CreateBuilder(args);
-// Configure JWT authentication
+
+// Autenticación JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
+// Servicios del negocio y repositorios
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -35,32 +35,38 @@ builder.Services.AddScoped<ICartRepository, CartEFRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 
 
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");
 
-// Agregar servicios al contenedor.
+builder.Services.AddDbContext<GatocanContext>(options =>
+    options.UseSqlServer(connectionString));
+
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-// Configurar CORS para permitir todas las solicitudes
 builder.Services.AddCors(options =>
 {
-options.AddPolicy("MyAllowedOrigins",
-    policy =>
+    options.AddPolicy("MyAllowedOrigins", policy =>
     {
         policy.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
+
+
+builder.Services.AddControllers();
+
+builder.Services.AddHttpClient();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gatocan API", Version = "v1" });
-
-    // Configure the security scheme for JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme",
@@ -83,36 +89,20 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Configurar DbContext con la cadena de conexión
-builder.Services.AddDbContext<GatocanContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    sqlOptions => sqlOptions.MigrationsAssembly("Gatocan.Data")));
-
-
-
-
 var app = builder.Build();
 
 
 
-
-// Configurar el pipeline de solicitudes HTTP.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+});
 
 app.UseHttpsRedirection();
-
 app.UseCors("MyAllowedOrigins");
-
 app.UseStaticFiles();
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

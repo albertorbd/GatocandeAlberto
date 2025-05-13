@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatocan.Data.Migrations
 {
     [DbContext(typeof(GatocanContext))]
-    [Migration("20250424130049_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250510173131_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
