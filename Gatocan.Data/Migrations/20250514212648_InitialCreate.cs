@@ -39,7 +39,9 @@ namespace Gatocan.Data.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Balance = table.Column<double>(type: "float", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -135,11 +137,11 @@ namespace Gatocan.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Balance", "Email", "Lastname", "Name", "Password", "Role" },
+                columns: new[] { "Id", "Address", "Balance", "Email", "Lastname", "Name", "Password", "Phone", "Role" },
                 values: new object[,]
                 {
-                    { 1, 100.0, "juan@example.com", "Pérez", "Juan", "pass123", "user" },
-                    { 2, 150.0, "albertoriveiro@hotmail.es", "Riveiro", "Alberto", "pass456", "admin" }
+                    { 1, null, 100.0, "juan@example.com", "Pérez", "Juan", "pass123", null, "user" },
+                    { 2, null, 150.0, "albertoriveiro@hotmail.es", "Riveiro", "Alberto", "pass456", null, "admin" }
                 });
 
             migrationBuilder.InsertData(

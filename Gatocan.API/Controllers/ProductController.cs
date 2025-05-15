@@ -24,19 +24,26 @@ public class ProductController : ControllerBase
 
 
 [HttpGet]
-    public ActionResult<IEnumerable<Product>> GetAllProducts()
+public ActionResult<IEnumerable<Product>> GetAllProducts(
+    [FromQuery] string? search,
+    [FromQuery] string[]? brands,
+    [FromQuery] string[]? categories,
+    [FromQuery] string? priceOrder   
+)
+{
+    try
     {
-        try 
-        {
-            var products = _productService.GetAllProducts();
-            return Ok(products);
-        }     
-        catch (Exception ex)
-        {
-            _logger.LogError($"An error has ocurred trying to get the products. {ex.Message}");
-            return BadRequest($"An error has ocurred trying to get the products. {ex.Message}");
-        }
+        var products = _productService.GetFilteredProducts(
+            search, brands, categories, priceOrder
+        );
+        return Ok(products);
     }
+    catch (Exception ex)
+    {
+        _logger.LogError($"Error al filtrar productos: {ex.Message}");
+        return BadRequest($"Error al filtrar productos: {ex.Message}");
+    }
+}
 
 [Authorize(Roles = Roles.Admin + "," + Roles.User)]
 [HttpGet("byName", Name = "GetProductByName")]
@@ -136,7 +143,7 @@ public class ProductController : ControllerBase
     {
         try 
         {
-            // Verificar si el modelo recibido es válido
+          
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
