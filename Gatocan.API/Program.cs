@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using Gatocan.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<IUserRepository, UserEFRepository>();
 builder.Services.AddScoped<IProductRepository, ProductEFRepository>();
 builder.Services.AddScoped<ICartRepository, CartEFRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
+builder.Services.AddSingleton<PaymentService>();
 
 
 var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");
@@ -57,6 +59,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+//Striple config//
+builder.Services.Configure<StripeSettings>(
+builder.Configuration.GetSection("Stripe"));
+builder.Services.AddSingleton<PaymentService>();
 
 builder.Services.AddControllers();
 

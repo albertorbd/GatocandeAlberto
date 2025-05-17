@@ -5,6 +5,10 @@
     <ProjectReference Include="..\Gatocan.Data\Gatocan.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Stripe.net" Version="48.1.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

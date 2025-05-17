@@ -68,7 +68,7 @@ public ActionResult<IEnumerable<Product>> GetAllProducts(
     }
 
 
- [Authorize(Roles = Roles.Admin + "," + Roles.User)]
+
  [HttpGet("{productId}", Name = "GetProductById") ]
     public IActionResult GetProductById(int productId)
     {

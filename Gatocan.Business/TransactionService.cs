@@ -41,53 +41,50 @@ public void MakeDeposit(DepositDto depositDTO)
     _repo.AddTransaction(transaction);
     _repo.SaveChanges();
 }
-        public void MakePurchase(PurchaseDto purchaseDTO)
-        {
-            var user = _userRepo.GetUserById(purchaseDTO.UserId)
-                       ?? throw new KeyNotFoundException($"User {purchaseDTO.UserId} not found.");
-            var prod = _productRepo.GetProductById(purchaseDTO.ProductId)
-                       ?? throw new KeyNotFoundException($"Product {purchaseDTO.ProductId} not found.");
+public void MakePurchase(PurchaseDto purchaseDTO)
+{
+    var user = _userRepo.GetUserById(purchaseDTO.UserId)
+               ?? throw new KeyNotFoundException($"User {purchaseDTO.UserId} not found.");
+    var prod = _productRepo.GetProductById(purchaseDTO.ProductId)
+               ?? throw new KeyNotFoundException($"Product {purchaseDTO.ProductId} not found.");
 
-            if (purchaseDTO.Quantity <= 0)
-                throw new ArgumentException("Quantity must be at least 1.", nameof(purchaseDTO.Quantity));
+    var totalCost = prod.Price * purchaseDTO.Quantity;
 
-            var totalCost = prod.Price * purchaseDTO.Quantity;
-            if (user.Balance < totalCost)
-                throw new InvalidOperationException("Insufficient balance.");
+    
+    if (purchaseDTO.PaymentMethod.Equals("Balance", StringComparison.OrdinalIgnoreCase))
+    {
+        if (user.Balance < totalCost)
+            throw new InvalidOperationException("Insufficient balance.");
+        user.Balance -= totalCost;
+        _userRepo.UpdateUser(user);
+        _userRepo.SaveChanges();
+    }
 
-            
-            user.Balance -= totalCost;
-            _userRepo.UpdateUser(user);
-            _userRepo.SaveChanges();
-
-            // 2) Registrar transacción
-            var transaction = new Transaction(
-                userId:        purchaseDTO.UserId,
-                productId:     purchaseDTO.ProductId,
-                amount:        totalCost,
-                quantity:      purchaseDTO.Quantity,
-                paymentMethod: purchaseDTO.PaymentMethod,
-                tipo:          TransactionType.Compra
-            );
-            _repo.AddTransaction(transaction);
-            _repo.SaveChanges();
-        }
+    var transaction = new Transaction(
+        userId:        purchaseDTO.UserId,
+        productId:     purchaseDTO.ProductId,
+        amount:        totalCost,
+        quantity:      purchaseDTO.Quantity,
+        paymentMethod: purchaseDTO.PaymentMethod,
+        tipo:          TransactionType.Compra
+    );
+    _repo.AddTransaction(transaction);
+    _repo.SaveChanges();
+}
 
 
-        public IEnumerable<Transaction> GetTransactionsByUser(int userId)
+    public IEnumerable<Transaction> GetTransactionsByUser(int userId)
         {
             return _repo.GetTransactionsByUserId(userId);
         }
 
-      public IEnumerable<Product> GetPurchasedProducts(int userId)
+ public IEnumerable<Product> GetPurchasedProducts(int userId)
 {
     var purchases = _repo
         .GetTransactionsByUserId(userId)
         .Where(t => t.Tipo == TransactionType.Compra)
-        // 1) Sólo aquellos con ProductId != null
         .Where(t => t.ProductId.HasValue);
 
-    // 2) Desembala .Value y obtén el producto
     return purchases
         .Select(t => _productRepo.GetProductById(t.ProductId.Value))
         .Where(p => p != null)
