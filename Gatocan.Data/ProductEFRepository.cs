@@ -17,10 +17,9 @@ namespace Gatocan.Data
             SaveChanges();
         }
         
-         public IEnumerable<Product> GetAllProducts() 
+        public IQueryable<Product> GetAllProducts() 
         {
-            var products = _context.Products;
-            return products;
+           return _context.Products;
         }
 
         public Product GetProductByName(string productName)

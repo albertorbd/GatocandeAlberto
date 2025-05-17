@@ -87,4 +87,37 @@ _repository.UpdateProduct(product);
 _repository.SaveChanges();
 }
 
+public IEnumerable<Product> GetFilteredProducts(
+    string? search,
+    string[]? brands,
+    string[]? categories,
+    string? priceOrder
+)
+{
+   
+    var query = _repository.GetAllProducts().AsQueryable();  
+
+    
+    if (!string.IsNullOrWhiteSpace(search))
+        query = query.Where(p => p.Name.Contains(search));
+
+   
+    if (brands != null && brands.Length > 0)
+        query = query.Where(p => brands.Contains(p.Brand));
+
+    
+    if (categories != null && categories.Length > 0)
+        query = query.Where(p => categories.Contains(p.Category));
+
+    
+    query = priceOrder switch
+    {
+        "asc"  => query.OrderBy(p => p.Price),
+        "desc" => query.OrderByDescending(p => p.Price),
+        _      => query
+    };
+
+    return query.ToList();
+}
+
 }

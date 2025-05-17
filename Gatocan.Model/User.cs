@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace Gatocan.Model;
 
+
+
     public class User
     {
         [Key]
@@ -18,7 +20,13 @@ namespace Gatocan.Model;
         public double Balance { get; set; } 
         [Required]
         public string Role { get; set; } = Roles.User;
+        
+        
+        [Phone]
+        public string? Phone { get; set; }
 
+        [MaxLength(250)]
+        public string? Address { get; set; }
          [JsonIgnore] 
         public List<Transaction> Transactions { get; set; }
         

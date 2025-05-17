@@ -88,17 +88,37 @@ throw new Exception("An error ocurred deleting the user", e);
 }
 }
 
- public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO){
-    
-var user = _repository.GetUserById(userId);
-if (user==null){
-throw new KeyNotFoundException($"User with ID {userId} wasnt found");
-}
-user.Name= userUpdateDTO.Name;
-user.Email= userUpdateDTO.Email;
-user.Password= userUpdateDTO.Password;
-_repository.UpdateUser(user);
-_repository.SaveChanges();
+ public void UpdateUser(int userId, UserUpdateDTO userUpdateDTO)
+{
+    var user = _repository.GetUserById(userId);
+    if (user == null)
+    {
+        throw new KeyNotFoundException($"User with ID {userId} wasn't found");
+    }
+
+    if (!string.IsNullOrEmpty(userUpdateDTO.Name))
+    {
+        user.Name = userUpdateDTO.Name;
+    }
+    if (!string.IsNullOrEmpty(userUpdateDTO.Email))
+    {
+        user.Email = userUpdateDTO.Email;
+    }
+    if (!string.IsNullOrEmpty(userUpdateDTO.Password))
+    {
+        user.Password = userUpdateDTO.Password;
+    }
+    if (!string.IsNullOrEmpty(userUpdateDTO.Phone))
+    {
+        user.Phone = userUpdateDTO.Phone;
+    }
+    if (!string.IsNullOrEmpty(userUpdateDTO.Address))
+    {
+        user.Address = userUpdateDTO.Address;
+    }
+
+    _repository.UpdateUser(user);
+    _repository.SaveChanges();
 }
 
 public bool IsEmailTaken(string email){
