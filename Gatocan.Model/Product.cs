@@ -7,8 +7,10 @@ using System.ComponentModel.DataAnnotations;
 public int Id { get; set; }
 [Required]     
 public string Name { get; set; } 
-[Required] 
+[Required]
 public string Description { get; set; }
+[Required] 
+public string longDescription { get; set; }
 [Required] 
 public double Price { get; set; }
 [Required]   
@@ -24,9 +26,10 @@ public string ImageUrl { get; set; }
 public Product(){}
 
 
-public Product(string name, string description, double price, string category, string brand, int stock, string imageUrl){
+public Product(string name, string description, string longdescription, double price, string category, string brand, int stock, string imageUrl){
 Name= name;
-Description= description;
+Description = description;
+longDescription = longdescription;
 Price= price;
 Category= category;
 Brand= brand;
