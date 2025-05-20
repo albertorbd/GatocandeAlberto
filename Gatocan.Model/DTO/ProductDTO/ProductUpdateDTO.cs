@@ -10,6 +10,8 @@ public class ProductUpdateDTO
     [Required]
     public string? Description { get; set; }
     [Required]
+    public string? longDescription { get; set; }
+    [Required]
     public double Price { get; set; }
     [Required]
     public string? Category { get; set; }

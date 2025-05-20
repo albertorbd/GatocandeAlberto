@@ -100,9 +100,13 @@ throw new Exception("An error ocurred deleting the user", e);
     {
         user.Name = userUpdateDTO.Name;
     }
-    if (!string.IsNullOrEmpty(userUpdateDTO.Email))
+   if (!string.IsNullOrEmpty(userUpdateDTO.Email) && userUpdateDTO.Email != user.Email)
+{
+    if (IsEmailTaken(userUpdateDTO.Email))
     {
-        user.Email = userUpdateDTO.Email;
+        throw new InvalidOperationException("El correo electrónico proporcionado ya está en uso por otra cuenta.");
+    }
+    user.Email = userUpdateDTO.Email;
     }
     if (!string.IsNullOrEmpty(userUpdateDTO.Password))
     {

@@ -17,7 +17,7 @@ _repository = repository;
 public Product RegisterProduct( ProductCreateDTO productCreateDTO){
  try
  {
-    Product product= new(productCreateDTO.Name,productCreateDTO.Description, productCreateDTO.Price, productCreateDTO.Category, productCreateDTO.Brand, productCreateDTO.Stock, productCreateDTO.ImageUrl);
+    Product product= new(productCreateDTO.Name,productCreateDTO.Description, productCreateDTO.longDescription, productCreateDTO.Price, productCreateDTO.Category, productCreateDTO.Brand, productCreateDTO.Stock, productCreateDTO.ImageUrl);
     _repository.AddProduct(product);
     _repository.SaveChanges();
     return product;
@@ -77,7 +77,8 @@ if (product==null){
 throw new KeyNotFoundException($"Product with ID {productId} wasnt found");
 }
 product.Name= productUpdateDTO.Name;
-product.Description=productUpdateDTO.Description;
+product.Description = productUpdateDTO.Description;
+product.longDescription=productUpdateDTO.longDescription;
 product.Price=productUpdateDTO.Price;
 product.Category= productUpdateDTO.Category;
 product.Brand= productUpdateDTO.Brand;
