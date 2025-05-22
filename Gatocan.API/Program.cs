@@ -37,7 +37,7 @@ builder.Services.AddScoped<ITransactionRepository, TransactionEFRepository>();
 builder.Services.AddSingleton<PaymentService>();
 
 
-var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_azure");
 
 builder.Services.AddDbContext<GatocanContext>(options =>
     options.UseSqlServer(connectionString));
@@ -97,6 +97,15 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+if (connectionString == "ServerDB_azure")
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<GatocanContext>();
+        context.Database.Migrate();
+    }
+}
 
 
 app.UseSwagger();
