@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyAllowedOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://agreeable-grass-007a9d203.6.azurestaticapps.net" )
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
